@@ -9,12 +9,11 @@ import com.contact.smartcontactmanager.entity.User;
 import com.contact.smartcontactmanager.repository.UserRepository;
 
 @Service
-public class UserDetails implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
 
-	public UserDetails(UserRepository userRepository) {
-		super();
+	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
@@ -23,8 +22,9 @@ public class UserDetails implements UserDetailsService {
 			throws UsernameNotFoundException {
 		
 		User user = userRepository.findByEmail(username).orElseThrow(()-> new ResourceNotFoundException("User not found"));
-
-		return null;
+		
+		CustomUserDetail customUserDetail=new CustomUserDetail(user);
+		return customUserDetail;
 	}
 
 }

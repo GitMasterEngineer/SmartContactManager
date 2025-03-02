@@ -13,7 +13,7 @@ import com.contact.smartcontactmanager.entity.User;
 import com.contact.smartcontactmanager.projection.UserProjection;
 
 @Repository
-@RepositoryRestResource(excerptProjection = UserProjection.class)
+@RepositoryRestResource(path="users")
 public interface UserRepository extends JpaRepository<User, String>{
 	
 	@RestResource(path="by-name",rel="by-email")

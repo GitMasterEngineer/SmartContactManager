@@ -10,12 +10,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Converts;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -75,13 +79,17 @@ public class User {
 
 	private String emailToken;
 
+//	@ManyToMany(fetch = FetchType.EAGER)
+//	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+//
+	// private Set<Role> roles;
+
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Contact> contacts = new LinkedHashSet<>();
 
-	public Collection<? extends GrantedAuthority> getRoles() {
-		 Collection<SimpleGrantedAuthority> roles = user.stream().map(role -> new SimpleGrantedAuthority(role))
-                .collect(Collectors.toList());
-        return roles;;
+	public Object getRoles() {
+		
+		return getRoles();
 	}
 
 }

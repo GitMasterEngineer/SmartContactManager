@@ -1,14 +1,17 @@
 package com.contact.smartcontactmanager.exception;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
@@ -30,4 +33,30 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
 		
 	}
+	
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException ex){
+		Map<String, String> response = new HashMap<>();
+		response.put("error", "Authentication falied");
+		response.put("message", ex.getMessage());
+		return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(JwtException.class)
+	public ResponseEntity<Map<String, String>> handleJwtException(JwtException ex){
+		Map<String, String> response = new HashMap<>();
+		response.put("error", "Invalid JWT token");
+		response.put("message", ex.getMessage());
+		return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Map<String, String>> handleGenericException(JwtException ex){
+		Map<String, String> response = new HashMap<>();
+		response.put("error", "Internal Server Error");
+		response.put("message", ex.getMessage());
+		return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
 }
